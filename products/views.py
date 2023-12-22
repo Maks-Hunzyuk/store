@@ -1,32 +1,45 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
 
 from products.models import Product, ProductCategory, Basket
 from users.models import User
+from common.views import TitleMixin
 
 
-def index(request):
-    context = {"title": "Store"}
-    return render(request, template_name="products/index.html", context=context)
+class IndexView(TitleMixin, TemplateView):
+
+    template_name = 'products/index.html'
+    title = 'Store'
 
 
-def products(request, category_id=None, page_number=1):
-    if category_id:
-        products = Product.objects.filter(category_id=category_id)
-    else:
-        products = Product.objects.all()
+  
 
-    per_page = 3
-    paginator = Paginator(products, per_page)
-    products_paginator = paginator.page(page_number)
-    context = {
-        'title': "Store - Каталог",
-        'products': products_paginator,
-        'categories': ProductCategory.objects.all()
-    }
-    return render(request, template_name="products/products.html", context=context)
 
+class ProductsListView(TitleMixin, ListView):
+
+    model = Product
+    template_name = 'products/products.html'
+    paginate_by = 3
+    title = "Store - Каталог"
+
+
+    def get_queryset(self) -> QuerySet[Any]:
+        queryset =  super(ProductsListView, self).get_queryset()
+        category_id = self.kwargs.get("category_id")
+        return queryset.filter(category_id=category_id) if category_id else queryset
+
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super(ProductsListView, self).get_context_data(**kwargs)
+        context["categories"] = ProductCategory.objects.all()
+        return context
+    
 
 @login_required
 def basket_add(request, product_id):
