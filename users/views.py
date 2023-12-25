@@ -1,20 +1,18 @@
 from typing import Any
-from django.http import HttpRequest
-from django.shortcuts import HttpResponseRedirect
-from django.http.response import HttpResponse as HttpResponse
-from django.shortcuts import render, HttpResponseRedirect
+
 from django.contrib import auth
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpRequest
+from django.http.response import HttpResponse as HttpResponse
+from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import CreateView, UpdateView
 
-
-from users.models import User, EmailVerification
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
-from products.models import Basket
 from common.views import TitleMixin
+from users.forms import UserLoginForm, UserProfileForm, UserRegistrationForm
+from users.models import EmailVerification, User
 
 
 class UserLoginView(TitleMixin, LoginView):
@@ -40,11 +38,6 @@ class UserProfileView(TitleMixin, UpdateView):
 
     def get_success_url(self) -> str:
         return reverse_lazy('users:profile', args=self.object)
-
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super(UserProfileView, self).get_context_data(**kwargs)
-        context['baskets'] = Basket.objects.filter(user=self.object)
-        return context
 
 
 def logout(request):
