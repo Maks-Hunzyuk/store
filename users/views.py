@@ -4,7 +4,7 @@ from django.contrib import auth
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpRequest
-from django.http.response import HttpResponse as HttpResponse
+from django.http.response import HttpResponse
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic.base import TemplateView

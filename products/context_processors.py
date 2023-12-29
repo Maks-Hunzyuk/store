@@ -1,4 +1,4 @@
-from models import Basket
+from products.models import Basket
 
 
 def baskets(request):
