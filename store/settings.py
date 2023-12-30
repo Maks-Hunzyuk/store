@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -154,7 +153,7 @@ LOGOUT_REDIRECT_URL = '/'
 # EMAIL_USE_SSL = True
 EMAIL_BACKEND = "django.core.mail.console.EmailBackend"
 
-#oauth
+# oauth
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
