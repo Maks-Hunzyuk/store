@@ -5,6 +5,7 @@ from django.db.models.query import QuerySet
 from django.shortcuts import HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
+from django.core.cache import cache
 
 from common.views import TitleMixin
 from products.models import Basket, Product, ProductCategory
@@ -28,7 +29,12 @@ class ProductsListView(TitleMixin, ListView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super(ProductsListView, self).get_context_data(**kwargs)
-        context["categories"] = ProductCategory.objects.all()
+        categories =  cache.get('categories')
+        if not categories:
+            context['categories'] = ProductCategory.objects.all()
+            cache.set('categories', context['categories'], 30)
+        else:
+            context['categories'] = categories
         return context
 
 
