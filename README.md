@@ -1,4 +1,9 @@
 Интернет магазин одежды:
+Проект написан:
+backend: Python-Djnago
+frontend: HTML, CSS, JS, bootstrap
+database: PostgreSQL, Redis
+Так же использовал Celery
 В этом проекте реализован следующий функционал:
   1. Авторизация пользователей
   2. Авторизация через соц сети(github)
